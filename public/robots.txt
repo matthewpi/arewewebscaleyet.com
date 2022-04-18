@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /cdn-cgi/
+
+User-agent: nsa
+Disallow: /

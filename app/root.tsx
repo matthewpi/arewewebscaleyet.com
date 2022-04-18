@@ -11,7 +11,7 @@ import {
 } from '@remix-run/react';
 
 import { getContentSecurityPolicy } from '~/services/csp.server';
-
+import inter from '~/styles/inter.css';
 import tailwind from '~/tailwind.css';
 
 export interface LoaderData {
@@ -34,6 +34,16 @@ export const links: LinksFunction = () => {
 	return [
 		{
 			rel: 'preload',
+			href: inter,
+			as: 'style',
+			type: 'text/css',
+		},
+		{
+			rel: 'stylesheet',
+			href: inter,
+		},
+		{
+			rel: 'preload',
 			href: tailwind,
 			as: 'style',
 			type: 'text/css',
@@ -48,8 +58,8 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = () => {
 	return {
 		charset: 'utf-8',
-		title: 'arewewebscaleyet.com',
-		description: 'Are we webscale yet?',
+		title: 'Are we Webscale yet?',
+		description: "idk man, why don't you read this site and find out.",
 		viewport: 'width=device-width,initial-scale=1',
 	};
 };
@@ -58,13 +68,13 @@ export default function App() {
 	const data = useLoaderData<LoaderData>();
 
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html suppressHydrationWarning lang="en">
 			<head>
 				<meta httpEquiv="Content-Security-Policy" content={data.csp} />
 				<Meta />
 				<Links />
 			</head>
-			<body className="min-h-screen bg-slate-900">
+			<body className="min-h-screen dark:bg-slate-900">
 				<Outlet />
 				<ScrollRestoration nonce={data.nonce} />
 				<Scripts nonce={data.nonce} />
