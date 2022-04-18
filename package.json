@@ -1,0 +1,109 @@
+{
+	"name": "@matthewpi/arewewebscaleyet",
+	"version": "1.0.0",
+	"private": true,
+	"sideEffects": false,
+	"engines": {
+		"node": ">=16.7",
+		"yarn": ">=1.22.0"
+	},
+	"scripts": {
+		"//1": "Install git hooks.",
+		"_postinstall:hooks": "simple-git-hooks",
+		"//2": "TailwindCSS",
+		"tailwind:_build": "tailwindcss --config tailwind.config.cjs --output app/tailwind.css",
+		"tailwind:build": "cross-env NODE_ENV=production yarn run tailwind:_build --minify",
+		"tailwind:dev": "cross-env NODE_ENV=development yarn run tailwind:_build --watch",
+		"//3": "Remix",
+		"remix:build": "remix build",
+		"remix:watch": "remix watch",
+		"//4": "Cloudflare Pages",
+		"worker:start": "cross-env NODE_ENV=development wrangler pages dev ./public",
+		"//5": "All the things",
+		"clean": "rimraf build public/build",
+		"build": "yarn run tailwind:build && yarn run remix:build",
+		"dev": "yarn run build && concurrently \"yarn run worker:start\" \"yarn run tailwind:dev\" \"yarn run remix:watch\""
+	},
+	"dependencies": {
+		"@remix-run/cloudflare": "1.4.1",
+		"@remix-run/cloudflare-pages": "1.4.1",
+		"@remix-run/react": "1.4.1",
+		"cross-env": "7.0.3",
+		"react": "18.0.0",
+		"react-dom": "18.0.0"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "3.5.1",
+		"@remix-run/dev": "1.4.1",
+		"@tailwindcss/aspect-ratio": "0.4.0",
+		"@tailwindcss/forms": "0.5.0",
+		"@tailwindcss/line-clamp": "0.3.1",
+		"@tailwindcss/typography": "0.5.2",
+		"@types/react": "18.0.5",
+		"@types/react-dom": "18.0.1",
+		"@types/tailwindcss": "3.0.10",
+		"autoprefixer": "10.4.4",
+		"concurrently": "7.1.0",
+		"eslint": "8.13.0",
+		"eslint-config-xo-react": "0.27.0",
+		"eslint-plugin-react": "7.29.4",
+		"eslint-plugin-react-hooks": "4.4.0",
+		"nano-staged": "0.7.0",
+		"postcss": "8.4.12",
+		"prettier": "2.6.2",
+		"prettier-plugin-tailwindcss": "0.1.8",
+		"rimraf": "3.0.2",
+		"simple-git-hooks": "2.7.0",
+		"tailwindcss": "3.0.24",
+		"typescript": "4.6.3",
+		"wrangler": "0.0.26",
+		"xo": "0.48.0"
+	},
+	"nano-staged": {
+		"{**/*,*}.{cjs,js,mjs,d.ts,ts,tsx}": [
+			"yarn xo --fix",
+			"yarn prettier --write"
+		],
+		"{**/*,*}.{css,html,json,md}": [
+			"yarn prettier --write"
+		]
+	},
+	"simple-git-hooks": {
+		"pre-commit": "yarn nano-staged"
+	},
+	"xo": {
+		"environments": [
+			"esnext"
+		],
+		"extends": [
+			"xo-react"
+		],
+		"prettier": true,
+		"rules": {
+			"@typescript-eslint/no-throw-literal": 0,
+			"capitalized-comments": 1,
+			"import/extensions": 0,
+			"no-negated-condition": 1,
+			"node/file-extension-in-import": 0,
+			"node/prefer-global/process": 0,
+			"react/react-in-jsx-scope": 0,
+			"unicorn/filename-case": 0
+		},
+		"overrides": [
+			{
+				"files": "app/**/*.tsx",
+				"rules": {
+					"@typescript-eslint/naming-convention": 0,
+					"react/function-component-definition": [
+						2,
+						{
+							"namedComponents": "function-declaration"
+						}
+					],
+					"unicorn/filename-case": 0
+				}
+			}
+		]
+	},
+	"packageManager": "yarn@3.2.0"
+}
